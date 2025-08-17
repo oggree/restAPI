@@ -9,16 +9,16 @@ import (
 	"github.com/swaggo/echo-swagger"
 )
 
-var restAPI *echo.Echo
+var Api *echo.Echo
 
 func Init() {
-	restAPI = echo.New()
+	Api = echo.New()
 
-	restAPI.GET("/", health)
+	Api.GET("/", health)
 
-	restAPI.GET("/swagger/*", echoSwagger.WrapHandler)
+	RestAPI.GET("/swagger/*", echoSwagger.WrapHandler)
 
-	restAPI.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+	RestAPI.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		Skipper:      middleware.DefaultSkipper,
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete, http.MethodOptions},
@@ -27,10 +27,10 @@ func Init() {
 
 	//restAPI.Use(JSONDataMiddleware)
 
-	restAPI.Use(middleware.Logger())
-	restAPI.Use(middleware.Recover())
+	RestAPI.Use(middleware.Logger())
+	RestAPI.Use(middleware.Recover())
 
-	restAPI.GET("/health", health)
+	RestAPI.GET("/health", health)
 
 }
 

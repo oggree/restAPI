@@ -16,27 +16,25 @@ func Init() {
 
 	Api.GET("/", health)
 
-	RestAPI.GET("/swagger/*", echoSwagger.WrapHandler)
+	Api.GET("/swagger/*", echoSwagger.WrapHandler)
 
-	RestAPI.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+	Api.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		Skipper:      middleware.DefaultSkipper,
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete, http.MethodOptions},
 		AllowHeaders: []string{"*"},
 	}))
 
-	//restAPI.Use(JSONDataMiddleware)
+	Api.Use(middleware.Logger())
+	Api.Use(middleware.Recover())
 
-	RestAPI.Use(middleware.Logger())
-	RestAPI.Use(middleware.Recover())
-
-	RestAPI.GET("/health", health)
+	Api.GET("/health", health)
 
 }
 
 func Start() {
-	if err := restAPI.Start(":8080"); err != nil && !errors.Is(err, http.ErrServerClosed) {
-		restAPI.Logger.Fatal("error while starting server", err)
+	if err := Api.Start(":8080"); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		Api.Logger.Fatal("error while starting server", err)
 	}
 }
 

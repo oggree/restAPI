@@ -2,10 +2,12 @@ package restAPI
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/spf13/viper"
 	"github.com/swaggo/echo-swagger"
 )
 
@@ -26,14 +28,23 @@ func Init() {
 	}))
 
 	Api.Use(middleware.Logger())
-	Api.Use(middleware.Recover())
+
+	env := viper.GetString("env")
+	if env == "production" {
+		Api.Use(middleware.Recover())
+	}
 
 	Api.GET("/health", health)
 
 }
 
 func Start() {
-	if err := Api.Start(":8080"); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	port := viper.GetString("port")
+	if port == "" {
+		port = "8080"
+	}
+
+	if err := Api.Start(fmt.Sprintf(":%s", port)); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		Api.Logger.Fatal("error while starting server", err)
 	}
 }

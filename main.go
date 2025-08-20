@@ -7,6 +7,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/oggree/restErrors"
 	"github.com/spf13/viper"
 	"github.com/swaggo/echo-swagger"
 )
@@ -51,4 +52,20 @@ func Start() {
 
 func health(c echo.Context) error {
 	return c.String(http.StatusOK, "I'm Healthy!")
+}
+
+type ResponseModel struct {
+	Status bool                  `json:"status"`
+	Error  *restErrors.RestError `json:"error"`
+	Data   interface{}           `json:"data"`
+}
+
+// TODO: change everywhere using this function after middleware
+func ResponseSuccessful(payload interface{}) ResponseModel {
+	response := ResponseModel{
+		Status: true,
+		Data:   payload,
+	}
+
+	return response
 }

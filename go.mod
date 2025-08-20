@@ -4,6 +4,7 @@ go 1.24
 
 require (
 	github.com/labstack/echo/v4 v4.13.4
+	github.com/oggree/restErrors v0.0.1
 	github.com/spf13/viper v1.20.1
 	github.com/swaggo/echo-swagger v1.4.1
 )

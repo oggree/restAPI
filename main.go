@@ -7,8 +7,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/oggree/config"
 	"github.com/oggree/restErrors"
-	"github.com/spf13/viper"
 	"github.com/swaggo/echo-swagger"
 )
 
@@ -30,7 +30,7 @@ func Init() {
 
 	Api.Use(middleware.Logger())
 
-	env := viper.GetString("env")
+	env := config.GetString("env")
 	if env == "production" {
 		Api.Use(middleware.Recover())
 	}
@@ -40,7 +40,7 @@ func Init() {
 }
 
 func Start() {
-	port := viper.GetString("port")
+	port := config.GetString("port")
 	if port == "" {
 		port = "8080"
 	}
